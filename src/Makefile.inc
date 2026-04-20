@@ -28,15 +28,15 @@ com-all: $(MAIN).pdf
 $(MAIN).pdf:
 	@rm -f *.aux *.bbl *.blg
 	$(LATEX) $(LATEXPARAM)
-	@if [[ ( -f $(MAIN).aux ) && ( `grep citation $(MAIN).aux | wc -l` -ge 1 ) ]]; then \
+	@if [ -f $(MAIN).aux ] && [ "$$(grep -c citation $(MAIN).aux)" -ge 1 ]; then \
 	  bibtex $(MAIN); \
 	fi
 	$(LATEX) $(LATEXPARAM)
 	$(LATEX) $(LATEXPARAM)
-	@if [ -f $(MAIN).log ] && grep undefined\ references $(MAIN).log ; then \
+	@if [ -f $(MAIN).log ] && grep 'undefined references' $(MAIN).log > /dev/null; then \
 	  for XREF in $(XREFS); do \
 	    echo '\033[33mRecompiling XREF ' $$XREF; \
-	    make -C $$XREF; \
+	    $(MAKE) -C $$XREF; \
 	    echo '\033[39m'; \
 	  done; \
 	  $(LATEX) $(LATEXPARAM); \
@@ -58,5 +58,4 @@ clean:
 	rm -f $(MAIN).idx $(MAIN).loa $(MAIN).lot $(MAIN).lolisting 
 	rm -f $(MAIN).synctex.gz $(MAIN).nav $(MAIN).out $(MAIN).snm
 	rm -f $(MAIN).pdf
-
 

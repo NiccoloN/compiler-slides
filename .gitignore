@@ -160,3 +160,6 @@ TSWLatexianTemp*
 
 # Temporary files
 *~
+
+# IDEs
+.idea
